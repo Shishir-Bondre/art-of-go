@@ -27,7 +27,7 @@ func main(){
 }
 
 func noteContents(note Note){
-	fmt.Println("-----------------",
+	fmt.Println("-------------------------",
 		"\nId:", note.id,
 		"\nTitle:", note.title,
 		"\ndescription:", note.description,
