@@ -38,7 +38,8 @@ func noteContents(note Note){
 
 func commandLine(notes *Notes){
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Enter the choice \n1. Create Note \n2. Retrieve Note \n3. Retrieve all Notes \nPress any key to exit")
+	fmt.Println("Enter the choice \n1. Create Note \n2. Retrieve Note \n3. Retrieve all Notes" +
+		"\n4. Update note \n5. Delete note by id or title \n6. Delete all notes \nPress any key to exit")
 	var choice string
 	fmt.Scanf("%s",&choice)
 	switch choice {
@@ -52,6 +53,7 @@ func commandLine(notes *Notes){
 		if created {
 			noteContents(note)
 		}
+		fmt.Println("==============================")
 		commandLine(notes)
 	case "2":
 		fmt.Println("Title: ")
