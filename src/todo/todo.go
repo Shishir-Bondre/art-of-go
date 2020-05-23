@@ -65,9 +65,45 @@ func commandLine(notes *Notes){
 		if found{
 			noteContents(note)
 		}
+		fmt.Println("==============================")
 		commandLine(notes)
 	case "3":
 		getAllNotes(notes)
+		fmt.Println("==============================")
+		commandLine(notes)
+	case "4":
+		fmt.Println("Title: ")
+		title, _ := reader.ReadString('\n')
+		fmt.Println("Id:")
+		id, _ := reader.ReadString('\n')
+		fmt.Println("-------------------------")
+		fmt.Println("New Title: ")
+		newTitle, _ := reader.ReadString('\n')
+		fmt.Println("New Description:")
+		newDescription, _ := reader.ReadString('\n')
+		modifiedNote := Note{title:newTitle, description:newDescription}
+		if newTitle ==""{
+			modifiedNote = Note{title:title, description:newDescription}
+		}
+		modified, note := notes.updateNoteByIdOrTitle(id, title, modifiedNote)
+		fmt.Println("Note modified:", modified)
+		if modified{
+			noteContents(note)
+		}
+		fmt.Println("==============================")
+		commandLine(notes)
+	case "5":
+		fmt.Println("Title: ")
+		title, _ := reader.ReadString('\n')
+		fmt.Println("Id:")
+		id, _ := reader.ReadString('\n')
+		deleted := notes.deleteNoteByIdOrTitle(id, title)
+		fmt.Println("Note deleted:", deleted)
+		fmt.Println("==============================")
+		commandLine(notes)
+	case "6":
+		notes = &Notes{}
+		fmt.Println("==============================")
 		commandLine(notes)
 	default:
 		fmt.Printf("%T\n", choice)
@@ -99,6 +135,37 @@ func (n *Notes) getNoteByIdOrTitle(id string, title string) (bool, Note) {
 	}
 	return false, Note{}
 }
+
+func (n *Notes) updateNoteByIdOrTitle(id string, title string, modifiedNote Note) (bool, Note) {
+	for i:=0;i<len(n.notes);i++{
+		if n.notes[i].title == title || n.notes[i].id.String() == id {
+			n.notes[i].title = modifiedNote.title
+			n.notes[i].description = modifiedNote.description
+			n.notes[i].updateAt = time.Now()
+			return true, n.notes[i]
+		}
+	}
+
+	return false, Note{}
+}
+
+func (n *Notes) deleteNoteByIdOrTitle(id string, title string) bool {
+	found := -1
+	fmt.Println(title)
+	for i:=0;i<len(n.notes);i++{
+		if n.notes[i].title == title || n.notes[i].id.String() == id{
+			found = i
+			break
+		}
+	}
+	fmt.Println(found)
+	if found > -1{
+		n.notes = append(n.notes[:found], n.notes[found+1:]...)
+		return true
+	}
+	return false
+}
+
 
 func getAllNotes(notes *Notes){
 	for _, note := range notes.notes {
