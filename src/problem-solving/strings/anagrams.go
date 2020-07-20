@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
-	"strings"
 )
 
 func main(){
@@ -12,23 +10,19 @@ func main(){
 	fmt.Println(findAnagrams("cde", "abc"))
 }
 
-func findAnagrams(input1, input2 string) int{
-		string1 := strings.Split(input1, "")
-		string2 := strings.Split(input2, "")
-		sort.Strings(string1)
-		sort.Strings(string2)
-		fmt.Println(string1, string2)
-		smallestLength := len(string2)
-		largestLength := len(string1)
-		if largestLength < smallestLength {
-			smallestLength, largestLength = largestLength, smallestLength
+func findAnagrams(string1, string2 string) int{
+		wordsDict := make(map[string]int)
+		for i:= range string1 {
+			wordsDict[string(string1[i])] += 1
+		}
+		for i:=range string2{
+			wordsDict[string(string2[i])] += 1
 		}
 		counter := 0
-		for i:=0 ; i < smallestLength; i++{
-			if string1[i] != string2[i]{
+		for _, value := range wordsDict{
+			if (value % 2) != 0{
 				counter ++
 			}
 		}
-		counter += largestLength - smallestLength
 		return counter
 }
